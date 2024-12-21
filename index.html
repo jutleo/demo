@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <script src="js/dama.js"></script>
+    <style>
+        body {
+            font-size: 16px;
+        }
+        .number {
+            position: fixed;
+            top: 30px;
+            left: 40%;
+            color: red;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        
+        p {
+            margin: 0;
+            padding: 5px;
+        }
+        
+        .yes {
+            color: #FFF;
+            background-color: rgb(51.2, 126.4, 204);
+        }
+        .selected {
+            color: #FFF;
+            background-color: rgb(196, 86.4, 86.4);
+        }
+        div#damas>div>div>p {cursor: pointer;}
+    </style>
+    <script type="text/javascript">
+        document.addEventListener('plusready', function() {
+            //console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。")
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="number" id="error_total">0</div>
+    <div id="damas" style="padding: 1px 2px;">
+
+    </div>
+
+    <script>
+        //定义错题数
+        var error_total = 0;
+        var getWTHTML = function(dama) {
+            return '<div style="padding:15px 0">' + dama.sno + '、' + dama.wt + '</div>';
+        };
+        var getXXHTML = function(dama) {
+            var xxArray = [];
+            xxArray.push('<div id="xx_' + dama.sno + '">');
+            for (var x = 0, xLne = dama.xx.length; x < xLne; x++) {
+                if(dama.sy) {
+                    if(dama.xx[x] === dama.da) {
+                        xxArray.push('<p onclick="selectItemAction(' + dama.sno + ','+x+')" class="yes">' + dama.xx[x] + '</p>');
+                    } else {
+                        if(dama.xx[x] === dama.sy) {
+                            xxArray.push('<p onclick="selectItemAction(' + dama.sno + ','+x+')" class="selected">' + dama.xx[x] + '</p>');
+                        } else {
+                            xxArray.push('<p onclick="selectItemAction(' + dama.sno + ','+x+')">' + dama.xx[x] + '</p>');
+                        }
+                    }
+                } else {
+                    xxArray.push('<p onclick="selectItemAction(' + dama.sno + ','+x+')">' + dama.xx[x] + '</p>');
+                }
+            }
+            xxArray.push('</div>');
+            return xxArray.join('');
+        };
+
+        var selectItemAction = function(sno, inx) {
+            var items = damas[sno - 1].xx;
+            var itemArray = [];
+            localStorage.setItem("dama_sno_" + sno, items[inx]);
+
+            for (var y = 0; y < items.length; y++) {
+                //正确答案
+                if(damas[sno - 1].da === items[y]) {
+                    itemArray.push('<p class="yes">' + items[y] + '</p>');
+                } else {
+                    if(inx === y) {
+                        //没有选对
+                        error_total = error_total + 1;
+                        localStorage.setItem('error_total', error_total);
+                        document.getElementById('error_total').innerText = error_total;
+                        itemArray.push('<p class="selected">' + items[y] + '</p>');
+                    } else {
+                        itemArray.push('<p>' + items[y] + '</p>');
+                    }
+                }
+            }
+            document.getElementById('xx_' + sno).innerHTML = itemArray.join('');
+        };
+
+        var allHTML = [];
+
+        for (var i = 0, iLen = damas.length; i < iLen; i++) {
+            if (localStorage.getItem("dama_sno_" + (i + 1))) {
+                damas[i].sy = localStorage.getItem("dama_sno_" + (i + 1));
+            }
+            allHTML.push('<div>');
+            allHTML.push(getWTHTML(damas[i], i + 1));
+            allHTML.push(getXXHTML(damas[i], i + 1));
+            allHTML.push('</div>');
+        }
+
+        document.getElementById('damas').innerHTML = allHTML.join('');
+        if(localStorage.getItem('error_total')) {
+            error_total = parseInt(localStorage.getItem('error_total'));
+        }
+        document.getElementById('error_total').innerText = error_total;
+    </script>
+</body>
+
+</html>
