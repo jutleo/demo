@@ -11,6 +11,7 @@
     <div id="location">定位信息</div>
     <script type="text/javascript">
         navigator.geolocation.getCurrentPosition(function(position) {
+            var x = document.getElementById("location");
             x.innerHTML = position;
         }, function(error) {
             var x = document.getElementById("location");
