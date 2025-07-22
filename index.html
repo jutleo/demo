@@ -8,10 +8,10 @@
 </head>
 
 <body>
-    <div>定位信息</div>
+    <div id="location">定位信息</div>
     <script type="text/javascript">
         navigator.geolocation.getCurrentPosition(position=> {
-            console.log(position);
+            document.getElementById('location').innerHTML = position.coords.latitude + ',' + position.coords.longitude;
         });
     </script>
 </body>
