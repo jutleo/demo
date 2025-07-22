@@ -13,6 +13,7 @@
         navigator.geolocation.watchPosition(function(position) {
             var x = document.getElementById("location");
             var tmp = [];
+            tmp.push('<p>持续监控信息如下：</p>');
             tmp.push('<p>十进制数的纬度：+ ' + position.coords.latitude + '</p>');
             tmp.push('<p>十进制数的经度：+ ' + position.coords.longitude + '</p>');
             tmp.push('<p>位置精度：+ ' + position.coords.accuracy + '</p>');
