@@ -12,7 +12,7 @@
     <script type="text/javascript">
         navigator.geolocation.getCurrentPosition(function(position) {
             var x = document.getElementById("location");
-            x.innerHTML = position;
+            x.innerHTML="纬度: " + position.coords.latitude + "<br>经度: " + position.coords.longitude;
         }, function(error) {
             var x = document.getElementById("location");
             switch(error.code) 
