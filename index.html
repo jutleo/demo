@@ -10,7 +10,9 @@
 <body>
     <div id="location">定位信息</div>
     <script type="text/javascript">
-        navigator.geolocation.getCurrentPosition(function(position) {}, function(error) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            x.innerHTML = position;
+        }, function(error) {
             var x = document.getElementById("location");
             switch(error.code) 
             {
