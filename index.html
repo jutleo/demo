@@ -9,6 +9,11 @@
 
 <body>
     <div>定位信息</div>
+    <script type="text/javascript">
+        navigator.geolocation.getCurrentPosition(position=> {
+            console.log(position);
+        });
+    </script>
 </body>
 
 </html>
