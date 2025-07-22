@@ -13,13 +13,13 @@
         navigator.geolocation.getCurrentPosition(function(position) {
             var x = document.getElementById("location");
             var tmp = [];
-            tmp.push('<p>coords.latitude：+ ' + position.coords.latitude + '</p>');
-            tmp.push('<p>coords.longitude：+ ' + position.coords.longitude + '</p>');
-            tmp.push('<p>coords.accuracy：+ ' + position.coords.accuracy + '</p>');
-            tmp.push('<p>coords.altitude：+ ' + position.coords.altitude + '</p>');
-            tmp.push('<p>coords.altitudeAccuracy：+ ' + position.coords.altitudeAccuracy + '</p>');
-            tmp.push('<p>coords.heading：+ ' + position.coords.heading + '</p>');
-            tmp.push('<p>coords.speed：+ ' + position.coords.speed + '</p>');
+            tmp.push('<p>十进制数的纬度：+ ' + position.coords.latitude + '</p>');
+            tmp.push('<p>十进制数的经度：+ ' + position.coords.longitude + '</p>');
+            tmp.push('<p>位置精度：+ ' + position.coords.accuracy + '</p>');
+            tmp.push('<p>海拔，海平面以上以米计：+ ' + position.coords.altitude + '</p>');
+            tmp.push('<p>位置的海拔精度：+ ' + position.coords.altitudeAccuracy + '</p>');
+            tmp.push('<p>方向，从正北开始以度计：+ ' + position.coords.heading + '</p>');
+            tmp.push('<p>速度，以米/每秒计：+ ' + position.coords.speed + '</p>');
             tmp.push('<p>timestamp：+ ' + position.timestamp + '</p>');
 
             x.innerHTML = tmp.join('');
