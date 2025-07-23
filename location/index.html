@@ -43,7 +43,7 @@
         }
 
         navigator.geolocation.watchPosition(function(position) {
-            localforage.setItem(position.timestamp, position.coords.latitude + ',' + position.coords.longitude + ',' + position.coords.altitude + ',' + position.coords.heading + ',' + position.coords.speed).then(function() {
+            localforage.setItem(position.timestamp, position.coords.longitude + ',' + position.coords.latitude + ',' + position.coords.altitude + ',' + position.coords.heading + ',' + position.coords.speed).then(function() {
                 var x = document.getElementById("location");
                 var tmp = [];
                 tmp.push('<table class="table">');
