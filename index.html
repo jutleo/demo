@@ -9,44 +9,6 @@
 
 <body>
     <div id="location">定位信息</div>
-    <script type="text/javascript">
-        navigator.geolocation.watchPosition(function(position) {
-            var x = document.getElementById("location");
-            var tmp = [];
-            tmp.push('<p>持续监控信息如下：</p>');
-            tmp.push('<p>十进制数的纬度：+ ' + position.coords.latitude + '</p>');
-            tmp.push('<p>十进制数的经度：+ ' + position.coords.longitude + '</p>');
-            tmp.push('<p>位置精度：+ ' + position.coords.accuracy + '</p>');
-            tmp.push('<p>海拔，海平面以上以米计：+ ' + position.coords.altitude + '</p>');
-            tmp.push('<p>位置的海拔精度：+ ' + position.coords.altitudeAccuracy + '</p>');
-            tmp.push('<p>方向，从正北开始以度计：+ ' + position.coords.heading + '</p>');
-            tmp.push('<p>速度，以米/每秒计：+ ' + position.coords.speed + '</p>');
-            tmp.push('<p>timestamp：+ ' + position.timestamp + '</p>');
-
-            x.innerHTML = tmp.join('');
-        }, function(error) {
-            var x = document.getElementById("location");
-            switch(error.code) 
-            {
-                case error.PERMISSION_DENIED:
-                    x.innerHTML="用户拒绝对获取地理位置的请求。"
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    x.innerHTML="位置信息是不可用的。"
-                    break;
-                case error.TIMEOUT:
-                    x.innerHTML="请求用户地理位置超时。"
-                    break;
-                case error.UNKNOWN_ERROR:
-                x.innerHTML="未知错误。"
-                break;
-        }
-    }, {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-    });
-    </script>
 </body>
 
 </html>
