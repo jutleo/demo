@@ -6,6 +6,7 @@
     <link href="../asstes/daisyui@5.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../asstes/browser@4.js"></script>
     <script type="text/javascript" src="../asstes/localforage.min.js"></script>
+    <script type="text/javascript" src="asstes/gcoord.global.prod.js"></script>
     <title></title>
 </head>
 
@@ -43,14 +44,18 @@
         }
 
         navigator.geolocation.watchPosition(function(position) {
-            localforage.setItem(position.timestamp, position.coords.longitude + ',' + position.coords.latitude + ',' + position.coords.altitude + ',' + position.coords.heading + ',' + position.coords.speed).then(function() {
+            var lngAndLatArray = gcoord.transform([position.coords.longitude,position.coords.latitude], gcoord.WGS84, gcoord.GCJ02);
+            var lng = lngAndLatArray[0].toFixed(6);
+            var lat = lngAndLatArray[1].toFixed(6);
+
+            localforage.setItem(position.timestamp, lng + ',' + lat + ',' + position.coords.altitude + ',' + position.coords.heading + ',' + position.coords.speed).then(function() {
                 var x = document.getElementById("location");
                 var tmp = [];
                 tmp.push('<table class="table">');
                 tmp.push('<tbody>');
                 tmp.push('<tr><td>timestamp</td><td>' + position.timestamp + '</td></tr>');
-                tmp.push('<tr><td>十进制数的纬度</td><td>' + position.coords.latitude + '</td></tr>');
-                tmp.push('<tr><td>十进制数的经度</td><td>' + position.coords.longitude + '</td></tr>');
+                tmp.push('<tr><td>十进制数的纬度</td><td>' + lat + '</td></tr>');
+                tmp.push('<tr><td>十进制数的经度</td><td>' + lng + '</td></tr>');
                 tmp.push('<tr><td>位置精度</td><td>' + position.coords.accuracy + '</td></tr>');
                 tmp.push('<tr><td>海拔，海平面以上以米计</td><td>' + position.coords.altitude + '</td></tr>');
                 tmp.push('<tr><td>位置的海拔精度</td><td>' + position.coords.altitudeAccuracy + '</td></tr>');
