@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="asstes/daisyui@5.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="asstes/browser@4.js"></script>
+    <script type="text/javascript" src="asstes/localforage.min.js"></script>
+    <title></title>
+</head>
+
+<body>
+    <div class="">
+        <div class="flex justify-center mb-10">
+            <button class="btn btn-primary" onclick="exportData()">导出</button>
+        </div>
+        <div class="bg-base-300 flex justify-center">定位信息</div>
+        <div id="location" class="flex justify-center">
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function exportData() {
+            var textArray = [];
+            localforage.iterate(function(value, key, iterationNumber) {
+                textArray.push(key + ',' + value);
+                localforage.removeItem(key);
+            }).then(function() {
+                const blob = new Blob([textArray.join('\n')], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'location.txt';
+                document.body.appendChild(a);
+                a.style.display = 'none';
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        navigator.geolocation.watchPosition(function(position) {
+            localforage.setItem(position.timestamp, position.coords.latitude + ',' + position.coords.longitude + ',' + position.coords.altitude + ',' + position.coords.heading + ',' + position.coords.speed).then(function() {
+                var x = document.getElementById("location");
+                var tmp = [];
+                tmp.push('<table class="table">');
+                tmp.push('<tbody>');
+                tmp.push('<tr><td>timestamp</td><td>' + position.timestamp + '</td></tr>');
+                tmp.push('<tr><td>十进制数的纬度</td><td>' + position.coords.latitude + '</td></tr>');
+                tmp.push('<tr><td>十进制数的经度</td><td>' + position.coords.longitude + '</td></tr>');
+                tmp.push('<tr><td>位置精度</td><td>' + position.coords.accuracy + '</td></tr>');
+                tmp.push('<tr><td>海拔，海平面以上以米计</td><td>' + position.coords.altitude + '</td></tr>');
+                tmp.push('<tr><td>位置的海拔精度</td><td>' + position.coords.altitudeAccuracy + '</td></tr>');
+                tmp.push('<tr><td>方向，从正北开始以度计</td><td>' + position.coords.heading + '</td></tr>');
+                tmp.push('<tr><td>速度，以米/每秒计</td><td>' + position.coords.speed + '</td></tr>');
+                tmp.push('</tbody></table>');
+    
+                x.innerHTML = tmp.join('');
+            });
+        }, function(error) {
+            var x = document.getElementById("location");
+            switch(error.code) 
+            {
+                case error.PERMISSION_DENIED:
+                    x.innerHTML="用户拒绝对获取地理位置的请求。"
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    x.innerHTML="位置信息是不可用的。"
+                    break;
+                case error.TIMEOUT:
+                    x.innerHTML="请求用户地理位置超时。"
+                    break;
+                case error.UNKNOWN_ERROR:
+                x.innerHTML="未知错误。"
+                break;
+        }
+    }, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    });
+
+    </script>
+</body>
+
+</html>
