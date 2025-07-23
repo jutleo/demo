@@ -15,14 +15,19 @@
         <a href="/demo" class="link link-hover">返回首页</a>
     </div>
     <div class="flex justify-center mt-5">
-        <button class="btn btn-primary" onclick="exportData()">导出</button>
+        <button class="btn btn-primary btn-xs mr-5" onclick="exportData()">导出数据</button>
+        <button class="btn btn-primary btn-xs" onclick="cleanData()">清除数据</button>
     </div>
-    <div id="location" class="w-1/3 m-auto border mt-10 border-gray-300">
+    <div id="location" class="ml-2 mr-2 border mt-10 border-gray-300">
 
     </div>
     </div>
 
     <script type="text/javascript">
+
+        function cleanData() {
+            localforage.clear();
+        }
 
         function exportData() {
             var textArray = [];
