@@ -6,7 +6,6 @@
     <link href="../asstes/daisyui@5.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../asstes/browser@4.js"></script>
     <script type="text/javascript" src="../asstes/localforage.min.js"></script>
-    <script type="text/javascript" src="asstes/gcoord.global.prod.js"></script>
     <title></title>
 </head>
 
@@ -49,23 +48,28 @@
         }
 
         navigator.geolocation.watchPosition(function(position) {
-            var lngAndLatArray = gcoord.transform([position.coords.longitude,position.coords.latitude], gcoord.WGS84, gcoord.GCJ02);
-            var lng = lngAndLatArray[0].toFixed(6);
-            var lat = lngAndLatArray[1].toFixed(6);
+            var tsp = position.timestamp.toString();
+            var tm = new Date(position.timestamp+8*3600*1000).toJSON().substr(0,19).replace('T',' ').toString();
+            var lng = position.coords.longitude.toFixed(6);
+            var lat = position.coords.latitude.toFixed(6);
+            var speed = Math.round(position.coords.speed*3600/1000);
+            var heading = Math.round(position.coords.heading);
+            var altitude = Math.round(position.coords.altitude);
 
-            localforage.setItem(position.timestamp, lng + ',' + lat + ',' + position.coords.altitude + ',' + position.coords.heading + ',' + position.coords.speed).then(function() {
+            localforage.setItem(tsp, tm + ',' + lng + ',' + lat + ',' + altitude + ',' + heading + ',' + speed).then(function() {
                 var x = document.getElementById("location");
                 var tmp = [];
                 tmp.push('<table class="table">');
                 tmp.push('<tbody>');
-                tmp.push('<tr><td>timestamp</td><td>' + position.timestamp + '</td></tr>');
+                tmp.push('<tr><td>timestamp</td><td>' + tsp + '</td></tr>');
+                tmp.push('<tr><td>日期</td><td>' + tm + '</td></tr>');
                 tmp.push('<tr><td>十进制数的纬度</td><td>' + lat + '</td></tr>');
                 tmp.push('<tr><td>十进制数的经度</td><td>' + lng + '</td></tr>');
                 tmp.push('<tr><td>位置精度</td><td>' + position.coords.accuracy + '</td></tr>');
-                tmp.push('<tr><td>海拔，海平面以上以米计</td><td>' + position.coords.altitude + '</td></tr>');
+                tmp.push('<tr><td>海拔，海平面以上以米计</td><td>' + altitude + '</td></tr>');
                 tmp.push('<tr><td>位置的海拔精度</td><td>' + position.coords.altitudeAccuracy + '</td></tr>');
-                tmp.push('<tr><td>方向，从正北开始以度计</td><td>' + position.coords.heading + '</td></tr>');
-                tmp.push('<tr><td>速度，以米/每秒计</td><td>' + position.coords.speed + '</td></tr>');
+                tmp.push('<tr><td>方向，从正北开始以度计</td><td>' + heading + '</td></tr>');
+                tmp.push('<tr><td>速度，以米/每秒计</td><td>' + speed + '</td></tr>');
                 tmp.push('</tbody></table>');
     
                 x.innerHTML = tmp.join('');
