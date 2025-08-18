@@ -28,6 +28,17 @@
             localforage.clear();
         }
 
+        function getFileName() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+            var day = String(now.getDate()).padStart(2, '0');
+            const dateStr = `${year}${month}${day}`;
+            const hours = date.getHours();
+            const suffix = hours >= 12 ? '_down' : '_up';
+            return dateStr + suffix + ".csv";
+        }
+
         function exportData() {
             var textArray = [];
             localforage.iterate(function(value, key, iterationNumber) {
@@ -38,7 +49,7 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'location.csv';
+                a.download = getFileName();
                 document.body.appendChild(a);
                 a.style.display = 'none';
                 a.click();
@@ -65,9 +76,9 @@
                 tmp.push('<tr><td>日期</td><td>' + tm + '</td></tr>');
                 tmp.push('<tr><td>十进制数的纬度</td><td>' + lat + '</td></tr>');
                 tmp.push('<tr><td>十进制数的经度</td><td>' + lng + '</td></tr>');
-                tmp.push('<tr><td>位置精度</td><td>' + position.coords.accuracy + '</td></tr>');
+                tmp.push('<tr><td>位置精度</td><td>' + Math.round(position.coords.accuracy) + '</td></tr>');
                 tmp.push('<tr><td>海拔，海平面以上以米计</td><td>' + altitude + '</td></tr>');
-                tmp.push('<tr><td>位置的海拔精度</td><td>' + position.coords.altitudeAccuracy + '</td></tr>');
+                tmp.push('<tr><td>位置的海拔精度</td><td>' + Math.round(position.coords.altitudeAccuracy) + '</td></tr>');
                 tmp.push('<tr><td>方向，从正北开始以度计</td><td>' + heading + '</td></tr>');
                 tmp.push('<tr><td>速度，以米/每秒计</td><td>' + speed + '</td></tr>');
                 tmp.push('</tbody></table>');
