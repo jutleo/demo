@@ -28,11 +28,12 @@
             localforage.clear();
         }
 
+        //自动构建下载文件名
         function getFileName() {
             var date = new Date();
             var year = date.getFullYear();
-            var month = String(now.getMonth() + 1).padStart(2, '0');
-            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var day = String(date.getDate()).padStart(2, '0');
             const dateStr = `${year}${month}${day}`;
             const hours = date.getHours();
             const suffix = hours >= 12 ? '_down' : '_up';
@@ -69,21 +70,22 @@
 
             localforage.setItem(tsp, tm + ',' + lng + ',' + lat + ',' + altitude + ',' + heading + ',' + speed).then(function() {
                 var x = document.getElementById("location");
-                var tmp = [];
-                tmp.push('<table class="table">');
-                tmp.push('<tbody>');
-                tmp.push('<tr><td>timestamp</td><td>' + tsp + '</td></tr>');
-                tmp.push('<tr><td>日期</td><td>' + tm + '</td></tr>');
-                tmp.push('<tr><td>十进制数的纬度</td><td>' + lat + '</td></tr>');
-                tmp.push('<tr><td>十进制数的经度</td><td>' + lng + '</td></tr>');
-                tmp.push('<tr><td>位置精度</td><td>' + Math.round(position.coords.accuracy) + '</td></tr>');
-                tmp.push('<tr><td>海拔，海平面以上以米计</td><td>' + altitude + '</td></tr>');
-                tmp.push('<tr><td>位置的海拔精度</td><td>' + Math.round(position.coords.altitudeAccuracy) + '</td></tr>');
-                tmp.push('<tr><td>方向，从正北开始以度计</td><td>' + heading + '</td></tr>');
-                tmp.push('<tr><td>速度，以米/每秒计</td><td>' + speed + '</td></tr>');
-                tmp.push('</tbody></table>');
-    
-                x.innerHTML = tmp.join('');
+                const tableHTML = `
+                    <table class="table">
+                        <tbody>
+                            <tr><td>timestamp</td><td>${tsp}</td></tr>
+                            <tr><td>日期</td><td>${tm}</td></tr>
+                            <tr><td>十进制数的经度</td><td>${lng}</td></tr>
+                            <tr><td>十进制数的纬度</td><td>${lat}</td></tr>
+                            <tr><td>位置精度</td><td>${Math.round(position.coords.accuracy)}</td></tr>
+                            <tr><td>海拔，海平面以上以米计</td><td>${altitude}</td></tr>
+                            <tr><td>位置的海拔精度</td><td>${Math.round(position.coords.altitudeAccuracy)}</td></tr>
+                            <tr><td>方向，从正北开始以度计</td><td>${heading}</td></tr>
+                            <tr><td>速度，以米/每秒计</td><td>${speed}</td></tr>
+                        </tbody>
+                    </table>
+                    `;
+                x.innerHTML = tableHTML;
             });
         }, function(error) {
             var x = document.getElementById("location");
